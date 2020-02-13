@@ -1,4 +1,5 @@
 import React from 'react';
+import PhotoFrame from './PhotoFrame';
 import config from '../config';
 
 class Container extends React.Component {
@@ -21,8 +22,11 @@ class Container extends React.Component {
             const newPhotos = [];
 
             for (const photo of photoArray) {
-                photo.imageURL = `${config.FLICKR_PUBLIC_BASE_URL}/photos/${photo.owner}/${photo.id}`;
-                photo.ownerURL = `${config.FLICKR_PUBLIC_BASE_URL}/people/${photo.owner}/`;
+                const { farm, server, id, secret, owner } = photo;
+
+                photo.src=`https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_m.jpg`
+                photo.imageURL = `${config.FLICKR_PUBLIC_BASE_URL}/photos/${owner}/${id}`;
+                photo.ownerURL = `${config.FLICKR_PUBLIC_BASE_URL}/people/${owner}/`;
                 newPhotos.push(photo);
             }
             this.setState({ photos: newPhotos });
@@ -42,7 +46,13 @@ class Container extends React.Component {
     }
 
     render() {
-        return <p>Container</p>
+        return (
+            <section>
+                {this.state.photos.map(photo => <PhotoFrame photo={photo} key={photo.id}/>)}
+            </section>
+        );
+
+
     }
 }
 
