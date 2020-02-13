@@ -1,4 +1,5 @@
 import React from 'react';
+import HeaderBar from './HeaderBar';
 import PhotoFrame from './PhotoFrame';
 import config from '../config';
 
@@ -10,8 +11,7 @@ class Container extends React.Component {
             totalPages: null,
             perPage: 50,
             photos: [],
-            userTags: ['cars', 'boats'],
-            tagModeAll: true,
+            userTags: ['landscape', 'safe'],
         };
     }
 
@@ -54,24 +54,45 @@ class Container extends React.Component {
             `&per_page=${this.state.perPage}` + // number of results per page
             `&format=json` + // returned format
             `&tags=${this.formatTags(this.state.userTags)}` + // tags to search by
-            `&tag_mode=${this.state.tagModeAll ? 'all' : 'any'}` + // all = must match all tags, any = can match any tag
+            `&tag_mode=all` + // all = must match all tags, any = can match any tag
             `&page=${this.state.page}` + // which page of paginated results to return
-            `&extras=description,tags` + // additioal data requested
+            `&extras=description,tags` + // additional data requested
             `&safe_search=1` + // 1 = safe search enabled (hence no mandatory safe tag required)
+            // `&text=nature` +
             `&nojsoncallback=1`; // don't pass a callback function, instead handle by awaiting result.json()
-            console.log(url);
+        console.log(url);
         const results = await (await fetch(url)).json();
         this.formatResults(results);
+    }
+
+    search = (event, searchText) => {
+        event.preventDefault();
+        console.log('search hit');
+        console.log(event, searchText);
+        const newTags = searchText.split(' ');
+        this.setState({ userTags: newTags });
     }
 
     componentDidMount = async () => {
         await this.fetchSearchResults();
     }
 
+    componentDidUpdate = async (prevProps, prevState) => {
+        if (this.state.userTags !== prevState.userTags) {
+            await this.fetchSearchResults();
+            window.scrollTo(500, 0);
+        }
+    }
+
     render() {
         return (
-            <section>
-                {this.state.photos.map(photo => <PhotoFrame photo={photo} key={photo.id} />)}
+            <section className="wrapper">
+                <HeaderBar
+                    search={this.search}
+                />
+                <section>
+                    {this.state.photos.map(photo => <PhotoFrame photo={photo} key={photo.id} />)}
+                </section>
             </section>
         );
 
@@ -80,3 +101,5 @@ class Container extends React.Component {
 }
 
 export default Container
+
+
