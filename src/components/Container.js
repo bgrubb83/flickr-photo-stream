@@ -11,7 +11,8 @@ class Container extends React.Component {
             totalPages: null,
             perPage: 50,
             photos: [],
-            userTags: ['landscape', 'safe'],
+            userTags: ['landscape', 'safe'], // set some nice safe defaults
+            searchText: 'landscape, safe', // this will be generated from userTags
         };
     }
 
@@ -54,11 +55,11 @@ class Container extends React.Component {
             `&per_page=${this.state.perPage}` + // number of results per page
             `&format=json` + // returned format
             `&tags=${this.formatTags(this.state.userTags)}` + // tags to search by
-            `&tag_mode=all` + // all = must match all tags, any = can match any tag
+            `&tag_mode=any` + // all = must match all tags, any = can match any tag
             `&page=${this.state.page}` + // which page of paginated results to return
             `&extras=description,tags` + // additional data requested
             `&safe_search=1` + // 1 = safe search enabled (hence no mandatory safe tag required)
-            // `&text=nature` +
+            `&text=${this.state.searchText}` +
             `&nojsoncallback=1`; // don't pass a callback function, instead handle by awaiting result.json()
         console.log(url);
         const results = await (await fetch(url)).json();
@@ -68,9 +69,9 @@ class Container extends React.Component {
     search = (event, searchText) => {
         event.preventDefault();
         console.log('search hit');
-        console.log(event, searchText);
-        const newTags = searchText.split(' ');
-        this.setState({ userTags: newTags });
+        // console.log(event, searchText);
+        const newTags = searchText.split(' ').slice(0, 20); // Flickr's search API can't handle more than 20 tags
+        this.setState({ userTags: newTags, searchText });
     }
 
     componentDidMount = async () => {
@@ -80,7 +81,7 @@ class Container extends React.Component {
     componentDidUpdate = async (prevProps, prevState) => {
         if (this.state.userTags !== prevState.userTags) {
             await this.fetchSearchResults();
-            window.scrollTo(500, 0);
+            window.scrollTo(0, 0);
         }
     }
 
