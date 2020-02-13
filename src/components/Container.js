@@ -64,7 +64,7 @@ class Container extends React.Component {
                 newPhotos.push(photo);
             }
             this.setState({ photos: Array.from(new Set([ ...this.state.photos, ...newPhotos ])) });
-            // console.log(newPhotos);
+            console.log(newPhotos);
         }
 
     }
