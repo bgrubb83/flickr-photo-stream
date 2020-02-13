@@ -11,8 +11,7 @@ class Container extends React.Component {
             lastPage: false,
             perPage: 50,
             photos: [],
-            userTags: ['landscape', 'safe'], // set some nice safe defaults
-            // searchText: 'landscape, safe', // this will be generated from userTags
+            userTags: ['landscape', 'safe'],
         };
     }
 
@@ -31,14 +30,10 @@ class Container extends React.Component {
     formatResults = ({ photos: metadata, photos: { photo: photoArray } }) => {
 
         if (metadata && photoArray) {
-            console.log(metadata);
 
             if (metadata.page && metadata.pages && metadata.page === metadata.pages) {
-                // we're on the last page of results
-                console.log('last page');
                 this.setState({ lastPage: true });
             } else {
-                console.log('not last page');
                 this.setState({ lastPage: false });
             }
 
@@ -47,40 +42,38 @@ class Container extends React.Component {
             for (const photo of photoArray) {
                 const { server, id, secret, owner } = photo;
 
-                /* 
+                /* -----------------------------------------------------------------------------
                 I have no idea why the below should be necessary, but it seems that when
                 a photo lives on farm 1, Flickr's API incorrectly returns it as farm 0.
-                I've found forum conversations describing this issue as far back as 4 years ago.
-                */
-
+                I've found forum discussions describing this issue as far back as 4 years ago.*/
                 let { farm } = photo;
                 if (farm === 0) {
                     farm = 1;
                 }
-                
-                photo.src = `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_m.jpg`
+                /* ----------------------------------------------------------------------------*/
+
+                photo.src = `${config.FLICKR_FARM_BASE_URL}${farm}.staticflickr.com/${server}/${id}_${secret}_m.jpg`
                 photo.imageURL = `${config.FLICKR_PUBLIC_BASE_URL}/photos/${owner}/${id}`;
                 photo.ownerURL = `${config.FLICKR_PUBLIC_BASE_URL}/people/${owner}/`;
                 newPhotos.push(photo);
             }
-            this.setState({ photos: Array.from(new Set([ ...this.state.photos, ...newPhotos ])) });
-            console.log(newPhotos);
+
+            this.setState({ photos: Array.from(new Set([...this.state.photos, ...newPhotos])) });
         }
 
     }
 
-    fetchSearchResults = async (page) => {
+    fetchSearchResults = async (page = 1) => {
         const url = `${config.FLICKR_API_BASE_URL}/services/rest/?method=flickr.photos.search` +
-            `&api_key=${config.FLICKR_API_KEY}` + // it's a secret!
-            `&per_page=${this.state.perPage}` + // number of results per page
-            `&format=json` + // returned format
-            `&tags=${this.formatTags(this.state.userTags)}` + // tags to search by
-            `&tag_mode=all` + // all = must match all tags, any = can match any tag
-            `&page=${page}` + // which page of paginated results to return
-            `&extras=description,tags` + // additional data requested
+            `&api_key=${config.FLICKR_API_KEY}` +
+            `&per_page=${this.state.perPage}` +
+            `&format=json` +
+            `&tags=${this.formatTags(this.state.userTags)}` +
+            `&tag_mode=all` +
+            `&page=${page}` +
+            `&extras=description,tags` +
             `&safe_search=1` + // 1 = safe search enabled (hence no mandatory safe tag required)
-            // `&text=${this.state.searchText}` +
-            `&nojsoncallback=1`; // don't pass a callback function, instead handle by awaiting result.json()
+            `&nojsoncallback=1`;
         console.log(url);
         const results = await (await fetch(url)).json();
         this.formatResults(results);
@@ -88,7 +81,6 @@ class Container extends React.Component {
 
     search = (event, searchText) => {
         event.preventDefault();
-        // console.log('search hit');
         const newTags = Array.from(new Set(searchText.split(' ').slice(0, 20))); // Flickr's search API can't handle more than 20 tags
         this.setState({ userTags: newTags });
     }
@@ -106,14 +98,12 @@ class Container extends React.Component {
     }
 
     render() {
-        console.log('total: ', this.state.photos.length)
         return (
             <section className="wrapper">
                 <HeaderBar
                     search={this.search}
                 />
                 <section className="pic-list">
-
                     <InfiniteScroll
                         pageStart={1}
                         loadMore={this.fetchSearchResults}
@@ -123,19 +113,9 @@ class Container extends React.Component {
                     >
                         {this.state.photos.map(photo => <PhotoFrame photo={photo} key={photo.id} />)}
                     </InfiniteScroll>
-
-
-
-
-
-
-
-                    
                 </section>
             </section>
         );
-
-
     }
 }
 
