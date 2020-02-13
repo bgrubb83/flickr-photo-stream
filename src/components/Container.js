@@ -8,8 +8,7 @@ class Container extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            page: 1,
-            totalPages: null,
+            lastPage: false,
             perPage: 50,
             photos: [],
             userTags: ['landscape', 'safe'], // set some nice safe defaults
@@ -34,6 +33,15 @@ class Container extends React.Component {
         if (metadata && photoArray) {
             console.log(metadata);
 
+            if (metadata.page && metadata.pages && metadata.page === metadata.pages) {
+                // we're on the last page of results
+                console.log('last page');
+                this.setState({ lastPage: true });
+            } else {
+                console.log('not last page');
+                this.setState({ lastPage: false });
+            }
+
             const newPhotos = [];
 
             for (const photo of photoArray) {
@@ -56,19 +64,19 @@ class Container extends React.Component {
                 newPhotos.push(photo);
             }
             this.setState({ photos: Array.from(new Set([ ...this.state.photos, ...newPhotos ])) });
-            console.log(newPhotos);
+            // console.log(newPhotos);
         }
 
     }
 
-    fetchSearchResults = async (page = 0) => {
+    fetchSearchResults = async (page) => {
         const url = `${config.FLICKR_API_BASE_URL}/services/rest/?method=flickr.photos.search` +
             `&api_key=${config.FLICKR_API_KEY}` + // it's a secret!
             `&per_page=${this.state.perPage}` + // number of results per page
             `&format=json` + // returned format
             `&tags=${this.formatTags(this.state.userTags)}` + // tags to search by
             `&tag_mode=all` + // all = must match all tags, any = can match any tag
-            `&page=${page + 1}` + // which page of paginated results to return
+            `&page=${page}` + // which page of paginated results to return
             `&extras=description,tags` + // additional data requested
             `&safe_search=1` + // 1 = safe search enabled (hence no mandatory safe tag required)
             // `&text=${this.state.searchText}` +
@@ -80,7 +88,7 @@ class Container extends React.Component {
 
     search = (event, searchText) => {
         event.preventDefault();
-        console.log('search hit');
+        // console.log('search hit');
         const newTags = Array.from(new Set(searchText.split(' ').slice(0, 20))); // Flickr's search API can't handle more than 20 tags
         this.setState({ userTags: newTags });
     }
@@ -107,12 +115,11 @@ class Container extends React.Component {
                 <section className="pic-list">
 
                     <InfiniteScroll
-                        pageStart={0}
+                        pageStart={1}
                         loadMore={this.fetchSearchResults}
-                        hasMore={true}
+                        hasMore={!this.state.lastPage}
                         loader={<div className="loader" key={0}>Loading ...</div>}
                         initialLoad={false}
-                        
                     >
                         {this.state.photos.map(photo => <PhotoFrame photo={photo} key={photo.id} />)}
                     </InfiniteScroll>
