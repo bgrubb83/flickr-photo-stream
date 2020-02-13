@@ -71,7 +71,7 @@ class Container extends React.Component {
             `&tags=${this.formatTags(this.state.userTags)}` +
             `&tag_mode=all` +
             `&page=${page}` +
-            `&extras=description,tags` +
+            `&extras=description,tags,owner_name` +
             `&safe_search=1` + // 1 = safe search enabled (hence no mandatory safe tag required)
             `&nojsoncallback=1`;
         console.log(url);

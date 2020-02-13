@@ -20,14 +20,22 @@ class SearchBox extends React.Component {
 
     render() {
         return (
-            <form onSubmit={(event) => { this.handleSubmit(event) }}>
+            <form
+                onSubmit={(event) => { this.handleSubmit(event) }}
+                className="form"
+            >
                 <input
+                    id="search-box"
                     type="text"
                     value={this.state.searchText}
                     onChange={this.handleChange}
                     placeholder="What would you like to see?"
                 />
-                <button type="submit" disabled={this.state.searchText.length === 0}>Search</button>
+                <button
+                    type="submit"
+                    disabled={this.state.searchText.length === 0}
+                    className="button" >Search
+                </button>
             </form>
         );
     }

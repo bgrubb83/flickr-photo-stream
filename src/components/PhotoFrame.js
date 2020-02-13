@@ -1,5 +1,6 @@
 import React from 'react';
 import PhotoImage from './PhotoImage';
+import PhotoDetails from './PhotoDetails';
 
 function PhotoFrame(props) {
     return (
@@ -8,6 +9,7 @@ function PhotoFrame(props) {
                 src={props.photo.src}
                 title={props.photo.title}
             />
+            <PhotoDetails photo={props.photo}/>
         </section>
     );
 }
