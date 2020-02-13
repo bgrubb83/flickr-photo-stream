@@ -8,6 +8,7 @@ function PhotoImage(props) {
             title={props.title}
             src={props.src}
             effect="opacity"
+            width="100%"
         />
     );
 }

@@ -52,7 +52,7 @@ class Container extends React.Component {
                 }
                 /* ----------------------------------------------------------------------------*/
 
-                photo.src = `${config.FLICKR_FARM_BASE_URL}${farm}.staticflickr.com/${server}/${id}_${secret}_m.jpg`
+                photo.src = `${config.FLICKR_FARM_BASE_URL}${farm}.staticflickr.com/${server}/${id}_${secret}_q.jpg`
                 photo.imageURL = `${config.FLICKR_PUBLIC_BASE_URL}/photos/${owner}/${id}`;
                 photo.ownerURL = `${config.FLICKR_PUBLIC_BASE_URL}/people/${owner}/`;
                 newPhotos.push(photo);
@@ -97,7 +97,35 @@ class Container extends React.Component {
         }
     }
 
+    sortPhotosIntoColumns = (photos) => {
+
+        let photosInColumns = {
+            col1: [],
+            col2: [],
+            col3: [],
+            col4: [],
+        }
+        let iterator = 1;
+        photos.forEach((photo) => {
+            photosInColumns[`col${iterator}`].push(photo);
+            if (iterator < 4) {
+                iterator ++;
+            } else {
+                iterator = 1;
+            }
+        });
+        console.log(photosInColumns.col1);
+        console.log(photosInColumns.col2);
+        console.log(photosInColumns.col3);
+        console.log(photosInColumns.col4);
+
+        return photosInColumns;
+    }
+
     render() {
+
+        const photosInColumns = this.sortPhotosIntoColumns(this.state.photos);
+
         return (
             <section className="wrapper">
                 <HeaderBar
@@ -111,7 +139,23 @@ class Container extends React.Component {
                         loader={<div className="loader" key={0}>Loading ...</div>}
                         initialLoad={false}
                     >
-                        {this.state.photos.map(photo => <PhotoFrame photo={photo} key={photo.id} />)}
+
+                        <section className="row">
+                            <section className="column">
+                                {/* {this.state.photos.map(photo => <PhotoFrame photo={photo} key={photo.id} />)} */}
+                                {photosInColumns.col1.map(photo => <PhotoFrame photo={photo} key={photo.id} />)}
+
+                            </section>
+                            <section className="column">
+                            {photosInColumns.col2.map(photo => <PhotoFrame photo={photo} key={photo.id} />)}
+                            </section>
+                            <section className="column">
+                            {photosInColumns.col3.map(photo => <PhotoFrame photo={photo} key={photo.id} />)}
+                            </section>
+                            <section className="column">
+                            {photosInColumns.col4.map(photo => <PhotoFrame photo={photo} key={photo.id} />)}
+                            </section>
+                        </section>
                     </InfiniteScroll>
                 </section>
             </section>
