@@ -1,6 +1,7 @@
 import React from 'react';
 import HeaderBar from './HeaderBar';
 import PhotoFrame from './PhotoFrame';
+import Loading from './Loading';
 import config from '../config';
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -137,7 +138,8 @@ class Container extends React.Component {
                         pageStart={1}
                         loadMore={this.fetchSearchResults}
                         hasMore={!this.state.lastPage}
-                        loader={<div className="loader" key={0}>Loading ...</div>}
+                        // loader={<div className="loader" key={0}>Loading ...</div>}
+                        loader={<Loading />}
                         initialLoad={false}
                     >
 
