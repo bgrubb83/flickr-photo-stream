@@ -5,14 +5,14 @@ import TextContent from './TextContent';
 function PhotoDetails({ photo }) {
     return (
         <section className="photo-details">
-            <Link href={photo.imageURL} text={photo.title}/>
-            <Link href={photo.ownerURL} text={photo.ownername} small/>
+            <Link url={photo.imageURL} text={photo.title}/>
+            <Link url={photo.ownerURL} text={photo.ownername} small/>
 
             {/* <a href={photo.imageURL}>{photo.title}</a><br /> */}
             {/* <a href={photo.ownerURL}>{photo.ownername}</a><br /> */}
             {/* {photo.description._content}<br /> */}
             <TextContent
-                text={photo.description._content}
+                text={photo.strippedText}
             />
             <br />
             {/* {photo.tags} */}

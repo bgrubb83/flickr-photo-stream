@@ -1,9 +1,16 @@
 import React from 'react';
+import LinesEllipsis from 'react-lines-ellipsis'
 
 function TextContent(props) {
-    return(
+    return (
         <section className="text-content">
-            {props.text}
+            <LinesEllipsis
+                text={props.text}
+                maxLine='1'
+                ellipsis='...'
+                trimRight
+                basedOn='letters'
+            />
         </section>
     );
 }

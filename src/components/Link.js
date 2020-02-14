@@ -1,4 +1,5 @@
 import React from 'react';
+import LinesEllipsis from 'react-lines-ellipsis'
 
 function Link(props) {
     return (
@@ -7,7 +8,13 @@ function Link(props) {
                 href={props.url}
                 className={`link ${props.small ? 'small' : ''}`}
             >
-                {props.text}
+                <LinesEllipsis
+                    text={props.text}
+                    maxLine='1'
+                    ellipsis='...'
+                    trimRight
+                    basedOn='letters'
+                />
             </a>
         </section>
     );

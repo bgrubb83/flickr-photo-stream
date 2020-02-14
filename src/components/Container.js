@@ -55,6 +55,7 @@ class Container extends React.Component {
                 photo.src = `${config.FLICKR_FARM_BASE_URL}${farm}.staticflickr.com/${server}/${id}_${secret}_q.jpg`
                 photo.imageURL = `${config.FLICKR_PUBLIC_BASE_URL}/photos/${owner}/${id}`;
                 photo.ownerURL = `${config.FLICKR_PUBLIC_BASE_URL}/people/${owner}/`;
+                photo.strippedText = photo.description._content.replace(/(<([^>]+)>)/ig,"");
                 newPhotos.push(photo);
             }
 
