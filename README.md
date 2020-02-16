@@ -1,68 +1,41 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Flickr Photo Stream
 
-## Available Scripts
+A client-only web app built using React (`create-react-app`). Built in order to satisfy the criteria of a specific technical assessment.
 
-In the project directory, you can run:
+## Features
 
-### `yarn start`
+- Searching of Flickr by tags.
+- A set of default tags which are chosen from at random when the user hasn't input any search tags yet.
+- Fully respnonsive (the number of columns drops from 4 to 2 on smaller screen sizes).
+- Infinite scrolling to fetch more results (a maximum of 50 results are returned with each fetch).
+- lazy loading of images for increased performance, so that images won't render unless they are actually visible on the screen.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Considerations
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Security
 
-### `yarn test`
+Throughout the project's development I was sure not to commit its private Flickr API key to source control, which would have been a clear security concern. To resolve this issue for deployment I exported the API key in a local `.env` file which was `.gitignored` from source control. `create-react-app` supports reading from `.env` files at build time, so that while the public source code doesn't contain the API key, the final minified producion build does.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Browser Support
 
-### `yarn build`
+The criteria for the technical asessent specified that the app should support IE10+ browsers. By default however `create-react-app` only supports IE11+. The fix was to include a set of polyfills for IE9+, which fill in the missing functionality of the newer features of the JavaScript language which IE9+ doesn't support.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Third-party dependencies
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+I used the following third-party dependencies whilst developing this project:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- [create-react-app](https://create-react-app.dev/) (for boilerplating a React app without having to spend ages manually configuring Webpack, Babel etc).
+- [react-infinite-scroller](https://www.npmjs.com/package/react-infinite-scroller) (to provide the infinite scrolling functionality).
+- [react-lazy-load-image-component](https://www.npmjs.com/package/react-lazy-load-image-component) (to ensure that the browser only tries to render images which are actually in view).
+- [react-loader-spinner](https://www.npmjs.com/package/react-loader-spinner) (a library of loading spinners).
+- [react-app-polyfill](https://www.npmjs.com/package/react-app-polyfill) (to allow the deployed build to support IE9+ browsers).
+- [gh-pages](https://www.npmjs.com/package/gh-pages) (to enable deployment to GitHub Pages).
 
-### `yarn eject`
+## Changes I'd have liked to make given more time
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+If I had a longer time to spend on this project, the following are additions which I'd consider working on (in no particular order):
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- A more reliable photo grid structure. The current implementation can have issues if the user changes the browser width several times in quick succession whilst new content is still loading in. This can lead to some empty columns being rendered.
+- More rigid bug hunting/fixing. Toward the end of development I spotted an odd bug, where the 'Nothing to show here' message was being rendered when there was indeed content to display. I couldn't reproduce it and couldn't see an obvious cause for it in the code, but I know that the bug is in there somewhere...
+- Add a 'No more results' message when the end of the content is reached. I had an implementation of this working at one point, but it was flakely and unreliable, so I removed it. In its current form the loading spinner remains even when there is no more content to load, which may make it appear to the user as though the app is 'hanging/crashed'.
+- A server component. While I considered the API key's security (as described above), the fact that the key is included in the minified production build is still a security concern, as it could be intercepted through the browser. Given more time I'd have liked to have submitted all requests to the Flickr API through a Node/Express server, which would have contained the API key as an environment variable within its hosting environment. This would have removed the posibility of a user intercepting the API key through the browser.
