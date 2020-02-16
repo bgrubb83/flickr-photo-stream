@@ -3,6 +3,7 @@ import HeaderBar from './HeaderBar';
 import PhotoFrame from './PhotoFrame';
 import Loading from './Loading';
 import config from '../config';
+import StatusMessage from './StatusMessage';
 import InfiniteScroll from 'react-infinite-scroller';
 import { stripHTMLTags, stripNonAlphaNumericsAndWhiteSpace, getRandomElementFromArray } from '../lib/helpers';
 
@@ -14,8 +15,9 @@ class Container extends React.Component {
             perPage: 50,
             photos: [],
             userTags: [],
-            defaultTags: ['landscape', 'nature', 'trees'],
+            defaultTags: ['landscapes', 'nature', 'trees', 'cats', 'dogs'],
             mandatoryTags: ['safe'],
+            lastSearch: '',
         };
     }
 
@@ -27,7 +29,7 @@ class Container extends React.Component {
             :
             fallbackTags;
             console.log('tags', tags);
-
+            this.setState({ lastSearch: tags[0] });
             let tagString = '';
             tags.forEach((tag, index) => {
                 if (index === userTags.length - 1) {
@@ -91,7 +93,10 @@ class Container extends React.Component {
 
     search = (event, searchText) => {
         event.preventDefault();
-        const newTags = Array.from((new Set(stripNonAlphaNumericsAndWhiteSpace(searchText).split(' ').slice(0, 20)))); // Flickr's search API can't handle more than 20 tags
+
+        const formattedSearchString = stripNonAlphaNumericsAndWhiteSpace(searchText);
+        this.setState({ lastSearch: formattedSearchString.replace(/ /g, ', ') })
+        const newTags = Array.from((new Set(formattedSearchString.split(' ').slice(0, 20)))); // Flickr's search API can't handle more than 20 tags
         this.setState({ userTags: newTags });
     }
 
@@ -126,6 +131,15 @@ class Container extends React.Component {
         return photosInColumns;
     }
 
+    generateStatusMessage = () => {
+        const userHasEnteredTags = this.state.userTags && this.state.userTags.length > 0;
+        if (userHasEnteredTags) {
+            return `Here are some ${this.state.lastSearch} pictures like you asked for...`;
+        } else {
+            return `You've not searched for any tags yet, so here are some nice pictures of ${this.state.lastSearch} for you to look at...`;
+        }
+    }
+
     render() {
         const photosInColumns = this.sortPhotosIntoColumns(this.state.photos);
 
@@ -135,6 +149,7 @@ class Container extends React.Component {
                     search={this.search}
                 />
                 <section className="pic-list">
+                <StatusMessage message={this.generateStatusMessage()}/>
                     <InfiniteScroll
                         pageStart={1}
                         loadMore={this.fetchSearchResults}

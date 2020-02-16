@@ -224,3 +224,10 @@ h1 {
   align-items: center;
   justify-content: center;
 }
+
+.status-message {
+  color: grey;
+  padding: 8px;
+  padding-left: 32px;
+  padding-right: 32px;
+}
