@@ -15,7 +15,7 @@ class SearchBox extends React.Component {
 
     handleSubmit = (event) => {
         this.props.search(event, this.state.searchText);
-        this.setState({ todoText: '' });
+        this.setState({ searchText: '' });
     }
 
     render() {
