@@ -22,24 +22,49 @@ class Container extends React.Component {
     }
 
     collateTags = (userTags, defaultTags, mandatoryTags) => {
-        const fallbackTags = [ ...mandatoryTags];
-        fallbackTags.unshift(getRandomElementFromArray(defaultTags));
-        let tags = userTags && userTags.length > 0 ?
-            userTags
-            :
-            fallbackTags;
-            console.log('tags', tags);
-            this.setState({ lastSearch: tags[0] });
-            let tagString = '';
-            tags.forEach((tag, index) => {
-                if (index === userTags.length - 1) {
-                    tagString += `${tag}`
-                } else {
-                    tagString += `${tag},`
-                }
-            });
-            return tagString;
+        let tags;
+        const fallbackTags = [...mandatoryTags];
+        if (userTags && userTags.length > 0) {
+            console.log('userTags', userTags)
+            console.log('mand', mandatoryTags);
+            tags = [...userTags, ...mandatoryTags];
+        } else {
+            fallbackTags.unshift(getRandomElementFromArray(defaultTags));
+            tags = fallbackTags;
+        }
+        console.log('tags', tags);
+        this.setState({ lastSearch: tags[0] });
+        let tagString = '';
+        tags.forEach((tag, index) => {
+            if (index === tags.length - 1) {
+                tagString += `${tag}`
+            } else {
+                tagString += `${tag},`
+            }
+        });
+        console.log(tagString);
+        return tagString;
     }
+
+    // collateTags = (userTags, defaultTags, mandatoryTags) => {
+    //     const fallbackTags = [ ...mandatoryTags];
+    //     fallbackTags.unshift(getRandomElementFromArray(defaultTags));
+    //     let tags = userTags && userTags.length > 0 ?
+    //         userTags
+    //         :
+    //         fallbackTags;
+    //         console.log('tags', tags);
+    //         this.setState({ lastSearch: tags[0] });
+    //         let tagString = '';
+    //         tags.forEach((tag, index) => {
+    //             if (index === userTags.length - 1) {
+    //                 tagString += `${tag}`
+    //             } else {
+    //                 tagString += `${tag},`
+    //             }
+    //         });
+    //         return tagString;
+    // }
 
     formatResults = ({ photos: metadata, photos: { photo: photoArray } }) => {
         if (metadata && photoArray) {
@@ -149,7 +174,7 @@ class Container extends React.Component {
                     search={this.search}
                 />
                 <section className="pic-list">
-                <StatusMessage message={this.generateStatusMessage()}/>
+                    <StatusMessage message={this.generateStatusMessage()} />
                     <InfiniteScroll
                         pageStart={1}
                         loadMore={this.fetchSearchResults}
