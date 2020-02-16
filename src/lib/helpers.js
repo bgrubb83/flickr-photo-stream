@@ -14,7 +14,5 @@ export function stripNonAlphaNumericsAndWhiteSpace(string) {
 }
 
 export function getRandomElementFromArray(array) {
-    const a = array[Math.floor(Math.random() * array.length)];
-    console.log(a);
-    return a;
+    return array[Math.floor(Math.random() * array.length)];
 }

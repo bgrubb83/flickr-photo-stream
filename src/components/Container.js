@@ -156,6 +156,10 @@ class Container extends React.Component {
         }
     }
 
+    refresh = () => {
+        window.location.reload(false);
+    }
+
     render() {
         const photosInColumns = this.sortPhotosIntoColumns(this.state.photos);
 
@@ -163,6 +167,7 @@ class Container extends React.Component {
             <section className="wrapper">
                 <HeaderBar
                     search={this.search}
+                    refresh={this.refresh}
                 />
                 <section className="pic-list">
                     <StatusMessage message={this.generateStatusMessage()} />

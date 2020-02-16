@@ -100,7 +100,7 @@ body {
   border-radius: 50px;
   border-width: 0;
   cursor: pointer;
-  color: #505050;
+  color: #fc167a;
   border-style: solid;
   border-width: 1px;
   border-color: white;
@@ -188,8 +188,14 @@ h1 {
 }
 
 .highlight {
+  color: #fc167a;
+  text-shadow: 0px 0px 1px rgba(255, 255, 255, 1);
+  cursor: pointer;
+}
+
+.highlight:hover {
   color: white;
-  text-shadow: 0px 0px 14px rgba(255, 255, 255, 1);
+  text-shadow: 0px 0px 8px rgba(255, 255, 255, 1);
 }
 
 .loading {

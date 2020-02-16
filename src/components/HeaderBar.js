@@ -6,8 +6,9 @@ function HeaderBar(props) {
     return (
         <section id="header-bar">
             <Logo
-                logoName="Flickr"
+                logoName="flickr"
                 logoText="Photo Stream"
+                refresh={props.refresh}
             />
             <SearchBox
                 search={props.search}
