@@ -11,6 +11,7 @@ function HeaderBar(props) {
             />
             <SearchBox
                 search={props.search}
+                placeholder="Enter comma separated tags to search for"
             />
         </section>
 

@@ -6,7 +6,7 @@ import PhotoTagBox from './PhotoTagBox';
 function PhotoDetails({ photo }) {
     return (
         <section className="photo-details">
-            <Link url={photo.imageURL} text={photo.title} />
+            <Link url={photo.imageURL} text={photo.title || "Untitled"} />
             <Link url={photo.ownerURL} text={photo.ownername} small />
             <TextContent
                 text={photo.strippedText}

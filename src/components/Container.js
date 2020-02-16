@@ -4,7 +4,7 @@ import PhotoFrame from './PhotoFrame';
 import Loading from './Loading';
 import config from '../config';
 import InfiniteScroll from 'react-infinite-scroller';
-import { stripHTMLTags } from '../lib/helpers';
+import { stripHTMLTags, stripNonAlphaNumericsAndWhiteSpace } from '../lib/helpers';
 
 class Container extends React.Component {
     constructor(props) {
@@ -74,13 +74,14 @@ class Container extends React.Component {
             `&extras=description,tags,owner_name` +
             `&safe_search=1` + // 1 = safe search enabled (hence no mandatory safe tag required)
             `&nojsoncallback=1`;
+            console.log(url);
         const results = await (await fetch(url)).json();
         this.formatResults(results);
     }
 
     search = (event, searchText) => {
         event.preventDefault();
-        const newTags = Array.from(new Set(searchText.split(' ').slice(0, 20))); // Flickr's search API can't handle more than 20 tags
+        const newTags = Array.from((new Set(stripNonAlphaNumericsAndWhiteSpace(searchText).split(' ').slice(0, 20)))); // Flickr's search API can't handle more than 20 tags
         this.setState({ userTags: newTags });
     }
 

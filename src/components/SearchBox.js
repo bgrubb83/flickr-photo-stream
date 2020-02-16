@@ -29,7 +29,7 @@ class SearchBox extends React.Component {
                     type="text"
                     value={this.state.searchText}
                     onChange={this.handleChange}
-                    placeholder="What would you like to see?"
+                    placeholder={this.props.placeholder}
                 />
                 <button
                     type="submit"
