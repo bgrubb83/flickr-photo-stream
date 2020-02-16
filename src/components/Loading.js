@@ -7,7 +7,7 @@ function Loading(props) {
         <section className="loading">
             <Loader
                 type="Puff"
-                color="#7c33f9"
+                color="#505050"
                 height={24}
                 width={24}
             />
