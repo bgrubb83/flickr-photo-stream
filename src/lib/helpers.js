@@ -12,3 +12,9 @@ export function stripNonAlphaNumericsAndWhiteSpace(string) {
     ^ = negates them all */
     return string.replace(/[^a-zA-Z\d\s]/, ' ');
 }
+
+export function getRandomElementFromArray(array) {
+    const a = array[Math.floor(Math.random() * array.length)];
+    console.log(a);
+    return a;
+}

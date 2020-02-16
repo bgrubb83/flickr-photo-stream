@@ -4,7 +4,7 @@ import PhotoFrame from './PhotoFrame';
 import Loading from './Loading';
 import config from '../config';
 import InfiniteScroll from 'react-infinite-scroller';
-import { stripHTMLTags, stripNonAlphaNumericsAndWhiteSpace } from '../lib/helpers';
+import { stripHTMLTags, stripNonAlphaNumericsAndWhiteSpace, getRandomElementFromArray } from '../lib/helpers';
 
 class Container extends React.Component {
     constructor(props) {
@@ -13,20 +13,30 @@ class Container extends React.Component {
             lastPage: false,
             perPage: 50,
             photos: [],
-            userTags: ['landscape', 'safe'],
+            userTags: [],
+            defaultTags: ['landscape', 'nature', 'trees'],
+            mandatoryTags: ['safe'],
         };
     }
 
-    formatTags = (userTags) => {
-        let tagString = '';
-        userTags.forEach((tag, index) => {
-            if (index === userTags.length - 1) {
-                tagString += `${tag}`
-            } else {
-                tagString += `${tag},`
-            }
-        });
-        return tagString;
+    collateTags = (userTags, defaultTags, mandatoryTags) => {
+        const fallbackTags = [ ...mandatoryTags];
+        fallbackTags.unshift(getRandomElementFromArray(defaultTags));
+        let tags = userTags && userTags.length > 0 ?
+            userTags
+            :
+            fallbackTags;
+            console.log('tags', tags);
+
+            let tagString = '';
+            tags.forEach((tag, index) => {
+                if (index === userTags.length - 1) {
+                    tagString += `${tag}`
+                } else {
+                    tagString += `${tag},`
+                }
+            });
+            return tagString;
     }
 
     formatResults = ({ photos: metadata, photos: { photo: photoArray } }) => {
@@ -68,13 +78,13 @@ class Container extends React.Component {
             `&api_key=${config.FLICKR_API_KEY}` +
             `&per_page=${this.state.perPage}` +
             `&format=json` +
-            `&tags=${this.formatTags(this.state.userTags)}` +
+            `&tags=${this.collateTags(this.state.userTags, this.state.defaultTags, this.state.mandatoryTags)}` +
             `&tag_mode=all` +
             `&page=${page}` +
             `&extras=description,tags,owner_name` +
-            `&safe_search=1` + // 1 = safe search enabled (hence no mandatory safe tag required)
+            `&safe_search=1` + // 1 = safe search enabled (not good enough though, also using a mandatory safe tag)
             `&nojsoncallback=1`;
-            console.log(url);
+        console.log(url);
         const results = await (await fetch(url)).json();
         this.formatResults(results);
     }
