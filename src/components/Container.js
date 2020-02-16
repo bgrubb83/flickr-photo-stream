@@ -31,9 +31,9 @@ class Container extends React.Component {
         } else {
             fallbackTags.unshift(getRandomElementFromArray(defaultTags));
             tags = fallbackTags;
+            this.setState({ lastSearch: tags[0] });
         }
         console.log('tags', tags);
-        this.setState({ lastSearch: tags[0] });
         let tagString = '';
         tags.forEach((tag, index) => {
             if (index === tags.length - 1) {
