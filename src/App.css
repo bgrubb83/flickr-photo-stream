@@ -4,7 +4,7 @@ body {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 16px;
   font-weight: 100;
-  color: #565656;
+  color: #505050;
   background-color: #fafafa;
 }
 .row {
@@ -214,4 +214,8 @@ h1 {
   padding-bottom: 0px;
   padding-left: 32px;
   padding-right: 32px;
+}
+
+.stand-out {
+  color: #fc167a;
 }

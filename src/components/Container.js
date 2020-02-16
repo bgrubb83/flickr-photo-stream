@@ -150,9 +150,9 @@ class Container extends React.Component {
 
         const userHasEnteredTags = this.state.userTags && this.state.userTags.length > 0;
         if (userHasEnteredTags) {
-            return `Here are some ${this.state.lastSearch} pictures like you asked for...`;
+        return <p>Here are some <span class="stand-out">{this.state.lastSearch}</span> pictures like you asked for...</p>
         } else {
-            return `You've not searched for any tags yet, so here are some nice pictures of ${this.state.lastSearch} for you to look at...`;
+            return <p>You've not searched for any tags yet, so here are some nice pictures of <span class="stand-out">{this.state.lastSearch}</span> for you to look at...</p>
         }
     }
 
