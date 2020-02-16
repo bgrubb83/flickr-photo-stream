@@ -9,6 +9,7 @@ A client-only web app built using React (`create-react-app`). Built in order to 
 - Fully respnonsive (the number of columns drops from 4 to 2 on smaller screen sizes).
 - Infinite scrolling to fetch more results (a maximum of 50 results are returned with each fetch).
 - lazy loading of images for increased performance, so that images won't render unless they are actually visible on the screen.
+- Stripping of any HTML content contained within photo descriptions, which was causing some rendering issues.
 
 ## Considerations
 
@@ -39,3 +40,7 @@ If I had a longer time to spend on this project, the following are additions whi
 - More rigid bug hunting/fixing. Toward the end of development I spotted an odd bug, where the 'Nothing to show here' message was being rendered when there was indeed content to display. I couldn't reproduce it and couldn't see an obvious cause for it in the code, but I know that the bug is in there somewhere...
 - Add a 'No more results' message when the end of the content is reached. I had an implementation of this working at one point, but it was flakely and unreliable, so I removed it. In its current form the loading spinner remains even when there is no more content to load, which may make it appear to the user as though the app is 'hanging/crashed'.
 - A server component. While I considered the API key's security (as described above), the fact that the key is included in the minified production build is still a security concern, as it could be intercepted through the browser. Given more time I'd have liked to have submitted all requests to the Flickr API through a Node/Express server, which would have contained the API key as an environment variable within its hosting environment. This would have removed the posibility of a user intercepting the API key through the browser.
+
+## Deployed Version
+
+Please find the deployed version of this project hosted on GitHub Pages [here](https://bgrubb83.github.io/flickr-photo-stream/).
