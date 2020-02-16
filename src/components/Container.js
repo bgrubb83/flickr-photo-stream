@@ -18,6 +18,7 @@ class Container extends React.Component {
             defaultTags: ['landscapes', 'nature', 'trees', 'cats', 'dogs'],
             mandatoryTags: ['safe'],
             lastSearch: '',
+            nothingReturned: false,
         };
     }
 
@@ -45,26 +46,6 @@ class Container extends React.Component {
         console.log(tagString);
         return tagString;
     }
-
-    // collateTags = (userTags, defaultTags, mandatoryTags) => {
-    //     const fallbackTags = [ ...mandatoryTags];
-    //     fallbackTags.unshift(getRandomElementFromArray(defaultTags));
-    //     let tags = userTags && userTags.length > 0 ?
-    //         userTags
-    //         :
-    //         fallbackTags;
-    //         console.log('tags', tags);
-    //         this.setState({ lastSearch: tags[0] });
-    //         let tagString = '';
-    //         tags.forEach((tag, index) => {
-    //             if (index === userTags.length - 1) {
-    //                 tagString += `${tag}`
-    //             } else {
-    //                 tagString += `${tag},`
-    //             }
-    //         });
-    //         return tagString;
-    // }
 
     formatResults = ({ photos: metadata, photos: { photo: photoArray } }) => {
         if (metadata && photoArray) {
@@ -97,6 +78,12 @@ class Container extends React.Component {
                 newPhotos.push(photo);
             }
             this.setState({ photos: Array.from(new Set([...this.state.photos, ...newPhotos])) });
+
+            if (newPhotos && newPhotos.length > 0) {
+                this.setState({ nothingReturned: false });
+            } else {
+                this.setState({ nothingReturned: true });
+            }
         }
     }
 
@@ -157,6 +144,10 @@ class Container extends React.Component {
     }
 
     generateStatusMessage = () => {
+        if (this.state.nothingReturned) {
+            return 'Nothing to show here...'
+        }
+
         const userHasEnteredTags = this.state.userTags && this.state.userTags.length > 0;
         if (userHasEnteredTags) {
             return `Here are some ${this.state.lastSearch} pictures like you asked for...`;
