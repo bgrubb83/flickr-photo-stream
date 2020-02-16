@@ -4,6 +4,7 @@ import PhotoFrame from './PhotoFrame';
 import Loading from './Loading';
 import config from '../config';
 import InfiniteScroll from 'react-infinite-scroller';
+import { stripHTMLTags } from '../lib/helpers';
 
 class Container extends React.Component {
     constructor(props) {
@@ -29,7 +30,6 @@ class Container extends React.Component {
     }
 
     formatResults = ({ photos: metadata, photos: { photo: photoArray } }) => {
-
         if (metadata && photoArray) {
 
             if (metadata.page && metadata.pages && metadata.page === metadata.pages) {
@@ -56,13 +56,11 @@ class Container extends React.Component {
                 photo.src = `${config.FLICKR_FARM_BASE_URL}${farm}.staticflickr.com/${server}/${id}_${secret}_q.jpg`
                 photo.imageURL = `${config.FLICKR_PUBLIC_BASE_URL}/photos/${owner}/${id}`;
                 photo.ownerURL = `${config.FLICKR_PUBLIC_BASE_URL}/people/${owner}/`;
-                photo.strippedText = photo.description._content.replace(/(<([^>]+)>)/ig, "");
+                photo.strippedText = stripHTMLTags(photo.description._content) || "This photo doesn't have a description.";
                 newPhotos.push(photo);
             }
-
             this.setState({ photos: Array.from(new Set([...this.state.photos, ...newPhotos])) });
         }
-
     }
 
     fetchSearchResults = async (page = 1) => {
@@ -76,7 +74,6 @@ class Container extends React.Component {
             `&extras=description,tags,owner_name` +
             `&safe_search=1` + // 1 = safe search enabled (hence no mandatory safe tag required)
             `&nojsoncallback=1`;
-        console.log(url);
         const results = await (await fetch(url)).json();
         this.formatResults(results);
     }
@@ -100,7 +97,6 @@ class Container extends React.Component {
     }
 
     sortPhotosIntoColumns = (photos) => {
-
         let photosInColumns = {
             col1: [],
             col2: [],
@@ -116,16 +112,10 @@ class Container extends React.Component {
                 iterator = 1;
             }
         });
-        console.log(photosInColumns.col1);
-        console.log(photosInColumns.col2);
-        console.log(photosInColumns.col3);
-        console.log(photosInColumns.col4);
-
         return photosInColumns;
     }
 
     render() {
-
         const photosInColumns = this.sortPhotosIntoColumns(this.state.photos);
 
         return (
@@ -164,5 +154,3 @@ class Container extends React.Component {
 }
 
 export default Container
-
-
