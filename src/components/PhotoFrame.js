@@ -9,7 +9,7 @@ function PhotoFrame(props) {
                 src={props.photo.src}
                 title={props.photo.title}
             />
-            <PhotoDetails photo={props.photo}/>
+            <PhotoDetails photo={props.photo} />
         </section>
     );
 }

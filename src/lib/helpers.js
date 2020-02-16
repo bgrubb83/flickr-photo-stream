@@ -10,7 +10,7 @@ export function stripNonAlphaNumericsAndWhiteSpace(string) {
     \d = numeric
     \s = whitespace
     ^ = negates them all */
-    return string.replace(/[^a-zA-Z\d\s]/, ' ');
+    return string.replace(/[^a-zA-Z\d\s]/g, ' ');
 }
 
 export function getRandomElementFromArray(array) {

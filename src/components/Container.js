@@ -2,10 +2,10 @@ import React from 'react';
 import HeaderBar from './HeaderBar';
 import PhotoFrame from './PhotoFrame';
 import Loading from './Loading';
-import config from '../config';
 import StatusMessage from './StatusMessage';
 import InfiniteScroll from 'react-infinite-scroller';
 import { stripHTMLTags, stripNonAlphaNumericsAndWhiteSpace, getRandomElementFromArray } from '../lib/helpers';
+import config from '../config';
 
 class Container extends React.Component {
     constructor(props) {
@@ -15,7 +15,7 @@ class Container extends React.Component {
             perPage: 50,
             photos: [],
             userTags: [],
-            defaultTags: ['landscapes', 'nature', 'trees', 'cats', 'dogs'],
+            defaultTags: ['landscapes', 'nature', 'trees', 'cats', 'dogs', 'gardens', 'boats', 'cars'],
             mandatoryTags: ['safe'],
             lastSearch: '',
             nothingReturned: false,
