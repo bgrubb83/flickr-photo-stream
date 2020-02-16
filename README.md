@@ -15,7 +15,7 @@ A client-only web app built using React (`create-react-app`). Built in order to 
 
 ### Security
 
-Throughout the project's development I was sure not to commit its private Flickr API key to source control, which would have been a clear security concern. To resolve this issue for deployment I exported the API key in a local `.env` file which was `.gitignored` from source control. `create-react-app` supports reading from `.env` files at build time, so that while the public source code doesn't contain the API key, the final minified producion build does.
+Throughout the project's development I was sure not to commit its private Flickr API key to source control, which would have been a clear security concern. To resolve this issue for deployment I exported the API key in a local `.env` file which was `.gitignore`d from source control. `create-react-app` supports reading from `.env` files at build time, so that while the public source code doesn't contain the API key, the final minified producion build does.
 
 ### Browser Support
 
