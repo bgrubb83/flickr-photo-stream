@@ -9,6 +9,8 @@ A client-only web app built using React (`create-react-app`). Built in order to 
 - Fully respnonsive (the number of columns drops from 4 to 2 on smaller screen sizes).
 - Infinite scrolling to fetch more results (a maximum of 50 results are returned with each fetch).
 - lazy loading of images for increased performance, so that images won't render unless they are actually visible on the screen.
+- Safe searching, using both the `safe_search` property on the API request, and also adding a mandatory `safe` tag to every request (without the `safe` tag the API was still returning some questionable results which I'm not convinced were very safe). This does however greatly limit the number of results returned. This is because the only way to ensure that the mandatory `safe` tag is added is to set `tag_mode` to `all` on the request, meaning that the API must return only photos which contain all of the tags submitted. This means that if the user searches for the tags `boat` and `sea` in a search, the actual API request will ask for only pictures containing the tags `boat` and `sea` and `safe`.
+- Regex checks on the user-inputted search strings, so that tags can be delimited by spaces, commas, dashes, etc.
 - Stripping of any HTML content contained within photo descriptions, which was causing some rendering issues.
 
 ## Considerations
@@ -39,6 +41,7 @@ If I had a longer time to spend on this project, the following are additions whi
 - A more reliable photo grid structure. The current implementation can have issues if the user changes the browser width several times in quick succession whilst new content is still loading in. This can lead to some empty columns being rendered.
 - More rigid bug hunting/fixing. Toward the end of development I spotted an odd bug, where the 'Nothing to show here' message was being rendered when there was indeed content to display. I couldn't reproduce it and couldn't see an obvious cause for it in the code, but I know that the bug is in there somewhere...
 - Add a 'No more results' message when the end of the content is reached. I had an implementation of this working at one point, but it was flakely and unreliable, so I removed it. In its current form the loading spinner remains even when there is no more content to load, which may make it appear to the user as though the app is 'hanging/crashed'.
+- Better regex checks on the user-inputted search strings. While the user can delimit tags with spaces, commas, dashes, or other common characters, I'm sure that my regex could be more robust, and there will be unexpected things that the user could enter which will break the results.
 - A server component. While I considered the API key's security (as described above), the fact that the key is included in the minified production build is still a security concern, as it could be intercepted through the browser. Given more time I'd have liked to have submitted all requests to the Flickr API through a Node/Express server, which would have contained the API key as an environment variable within its hosting environment. This would have removed the posibility of a user intercepting the API key through the browser.
 
 ## Deployed Version
